@@ -1,0 +1,4 @@
+
+
+class ArticleNotFound(Exception):
+    pass
