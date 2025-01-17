@@ -1,10 +1,10 @@
 import flet as ft
 import flet_easy as fs
-
 from sqlmodel import  Session
-from db import db
 
+from db import db
 from models import Fragment
+from dictionaries.en_ru import DICT
 
 article_read_page = fs.AddPagesy(
     route_prefix='/article'
@@ -58,6 +58,7 @@ def read_article(data:fs.Datasy, id: int):
                             ft.Text(
                                 fragment.text,
                                 expand=True,
+                                selectable=True,
                             ),
                             ft.PopupMenuButton(
                                 icon=ft.Icons.MORE_VERT,
@@ -95,6 +96,13 @@ def read_article(data:fs.Datasy, id: int):
         return card
 
     def create_word_card(word: str):
+        trans = ft.Text(
+            '',
+            expand=True,
+            visible=False,
+            selectable=True
+        )
+
         translation_row =  ft.Row([
                                 ft.Text(
                                     'Translation.. Translation.. Translation.. Translation.. Translation.. Translation.. ',
@@ -107,7 +115,15 @@ def read_article(data:fs.Datasy, id: int):
 
         def show_trans(e):
             #if translation_row.visible:
-            translation_row.visible = not translation_row.visible
+            #translation_row.visible = not translation_row.visible
+            if trans.visible:
+                trans.visible = False
+            else:
+                control = e.control
+                word = str(control.data)
+                word = word.lower()
+                trans.value = DICT[word]
+                trans.visible = True
             page.update()
 
         def add_to_vocab(e):
@@ -133,7 +149,8 @@ def read_article(data:fs.Datasy, id: int):
                             ft.IconButton(
                                 ft.Icons.ARROW_FORWARD,
                                 icon_size=20,
-                                on_click=show_trans
+                                on_click=show_trans,
+                                data=word
                             ),
                             ft.IconButton(
                                 ft.Icons.ADD,
@@ -153,7 +170,8 @@ def read_article(data:fs.Datasy, id: int):
                                 ],
                             ),
                         ]),
-                        translation_row
+                        #translation_row
+                        trans
                     ],
                     spacing=0,
                 ),
