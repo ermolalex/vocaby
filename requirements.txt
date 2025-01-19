@@ -1,6 +1,6 @@
-flet
-flet-easy
-sqlmodel
-spacy
-pystardict
-pytest
+flet==0.25.2
+flet-easy==0.2.8
+sqlmodel==0.0.22
+spacy==3.8.3
+PyStarDict==0.8
+pytest==8.3.4
