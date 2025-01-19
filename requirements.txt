@@ -1,4 +1,6 @@
+flet
+flet-easy
 sqlmodel
 spacy
-
+pystardict
 pytest
