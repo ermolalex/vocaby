@@ -72,20 +72,6 @@ def read_article(data:fs.Datasy, id: int):
                                 ],
                             ),
                         ])
-                        # ft.ListTile(
-                        #     title=ft.Text(f"{fragment.text}"),
-                        #     trailing=ft.PopupMenuButton(
-                        #         icon=ft.Icons.MORE_VERT,
-                        #         items=[
-                        #             ft.PopupMenuItem(
-                        #                 text="Item 1",
-                        #                 on_click=func1,
-                        #                 data=id,
-                        #             ),
-                        #             ft.PopupMenuItem(text="Item 2"),
-                        #         ],
-                        #     ),
-                        # ),
                     ],
                     spacing=0,
                 ),
@@ -96,34 +82,32 @@ def read_article(data:fs.Datasy, id: int):
         return card
 
     def create_word_card(word: str):
-        trans = ft.Text(
-            '',
+        trans =  ft.Text(
+                    '',
+                    expand=True,
+                    selectable=True
+                )
+
+        trans_col = ft.Column(
+            [
+                trans
+            ],
             expand=True,
             visible=False,
-            selectable=True
+            height=300,
         )
-
-        translation_row =  ft.Row([
-                                ft.Text(
-                                    'Translation.. Translation.. Translation.. Translation.. Translation.. Translation.. ',
-                                    expand=True
-                                ),
-                            ],
-                            expand=True,
-                            visible=False,
-                        )
 
         def show_trans(e):
             #if translation_row.visible:
             #translation_row.visible = not translation_row.visible
-            if trans.visible:
-                trans.visible = False
+            if trans_col.visible:
+                trans_col.visible = False
             else:
                 control = e.control
                 word = str(control.data)
                 word = word.lower()
                 trans.value = DICT[word]
-                trans.visible = True
+                trans_col.visible = True
             page.update()
 
         def add_to_vocab(e):
@@ -171,7 +155,7 @@ def read_article(data:fs.Datasy, id: int):
                             ),
                         ]),
                         #translation_row
-                        trans
+                        trans_col,
                     ],
                     spacing=0,
                 ),

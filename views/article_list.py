@@ -54,7 +54,7 @@ def article_list(data:fs.Datasy):
                 content=ft.Column(
                     [
                         ft.ListTile(
-                            title=ft.Text(f"{article.name} {id}"),
+                            title=ft.Text(f"{article.name} ({article.id})"),
                             subtitle=ft.Text("Первые ххх слов."),
                             trailing=ft.PopupMenuButton(
                                 icon=ft.Icons.MORE_VERT,
