@@ -1,14 +1,16 @@
+import flet
 import flet as ft
 import flet_easy as fs
 from sqlmodel import  Session
 
 from db import db
 from models import Fragment
-from dictionaries.en_ru import DICT
+from dictionaries.en_ru import get_word_translation, TranslationMethod
 
 article_read_page = fs.AddPagesy(
     route_prefix='/article'
 )
+
 
 @article_read_page.page(route='/read/{id:int}', title='Read')
 def read_article(data:fs.Datasy, id: int):
@@ -40,14 +42,33 @@ def read_article(data:fs.Datasy, id: int):
     lv = ft.ListView(expand=1, spacing=5, padding=5, auto_scroll=False)
     session = Session(db.engine)
 
-    def func1(e):
-        control = e.control
-        id = int(control.data)
-
-        print(f"selected frag {id}")
-
-
     def create_fragment_card(fragment: Fragment):
+        trans =  ft.Text(
+                    '',
+                    expand=True,
+                    selectable=True,
+                    bgcolor=flet.Colors.AMBER_200
+                )
+
+        trans_col = ft.Column(
+            [
+                trans
+            ],
+            expand=True,
+            visible=False,
+        )
+
+        def show_trans(e):
+            if trans_col.visible:
+                trans_col.visible = False
+            else:
+                control = e.control
+                text = str(control.data['word'])
+                method = int(control.data['method'])
+                trans.value = get_word_translation(text, method)
+                trans_col.visible = True
+            page.update()
+
         card = ft.Card(
             color=ft.Colors.AMBER_300,
             content=ft.Container(
@@ -60,18 +81,26 @@ def read_article(data:fs.Datasy, id: int):
                                 expand=True,
                                 selectable=True,
                             ),
-                            ft.PopupMenuButton(
-                                icon=ft.Icons.MORE_VERT,
-                                items=[
-                                    ft.PopupMenuItem(
-                                        text="Item 1",
-                                        on_click=func1,
-                                        data=fragment.id,
-                                    ),
-                                    ft.PopupMenuItem(text="Item 2"),
-                                ],
+                            ft.IconButton(
+                                ft.Icons.ARROW_FORWARD,
+                                icon_size=20,
+                                on_click=show_trans,
+                                data={
+                                    "word": fragment.text,
+                                    "method": TranslationMethod.GoogleTrans,
+                                }
                             ),
-                        ])
+                            # ft.PopupMenuButton(
+                            #     icon=ft.Icons.MORE_VERT,
+                            #     items=[
+                            #         ft.PopupMenuItem(
+                            #             text="Item 1",
+                            #         ),
+                            #         ft.PopupMenuItem(text="Item 2"),
+                            #     ],
+                            # ),
+                        ]),
+                        trans_col,
                     ],
                     spacing=0,
                 ),
@@ -104,9 +133,10 @@ def read_article(data:fs.Datasy, id: int):
                 trans_col.visible = False
             else:
                 control = e.control
-                word = str(control.data)
+                word = str(control.data['word'])
+                method = int(control.data['method'])
                 word = word.lower()
-                trans.value = DICT[word]
+                trans.value = get_word_translation(word, method)
                 trans_col.visible = True
             page.update()
 
@@ -134,7 +164,10 @@ def read_article(data:fs.Datasy, id: int):
                                 ft.Icons.ARROW_FORWARD,
                                 icon_size=20,
                                 on_click=show_trans,
-                                data=word
+                                data={
+                                    "word": word,
+                                    "method": TranslationMethod.FullDict,
+                                }
                             ),
                             ft.IconButton(
                                 ft.Icons.ADD,
@@ -146,9 +179,12 @@ def read_article(data:fs.Datasy, id: int):
                                 icon=ft.Icons.MORE_VERT,
                                 items=[
                                     ft.PopupMenuItem(
-                                        text="Item 1",
-                                        on_click=func1,
-                                        data=fragment.id,
+                                        text="Google",
+                                        on_click=show_trans,
+                                        data={
+                                            "word": word,
+                                            "method": TranslationMethod.GoogleTrans,
+                                        }
                                     ),
                                     ft.PopupMenuItem(text="Item 2"),
                                 ],
