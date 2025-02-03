@@ -10,7 +10,7 @@ article_list_page = fs.AddPagesy(
     route_prefix='/article'
 )
 
-@article_list_page.page(route='/list', title='List')
+@article_list_page.page(route='/list', title='List', protected_route=True)
 def article_list(data:fs.Datasy):
     page = data.page
     session = Session(db.engine)

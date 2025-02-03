@@ -12,7 +12,7 @@ article_read_page = fs.AddPagesy(
 )
 
 
-@article_read_page.page(route='/read/{id:int}', title='Read')
+@article_read_page.page(route='/read/{id:int}', title='Read', protected_route=True)
 def read_article(data:fs.Datasy, id: int):
     page = data.page
 
