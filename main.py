@@ -60,5 +60,5 @@ def login_page(data: fs.Datasy):
 
 app.add_pages([article_list_page, article_add_page, article_read_page, ])
 
-#app.run(view=ft.AppView.WEB_BROWSER, port=40000)
-app.run()
+app.run(view=ft.AppView.WEB_BROWSER, host='0.0.0.0', port=4000)
+#app.run()
