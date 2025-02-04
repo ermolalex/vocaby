@@ -4,3 +4,4 @@ sqlmodel==0.0.22
 spacy==3.8.3
 PyStarDict==0.8
 pytest==8.3.4
+googletrans

@@ -15,13 +15,18 @@ db = ["Sasa"]  # Database
 
 @app.login
 def login_x(data: fs.Datasy):
-    username = data.page.client_storage.get("login")
+    page = data.page
+    username = page.client_storage.get("login")
 
     """ We check if a value exists with the key login """
     if username is not None and username in db:
         """We verify if the username that is stored in the browser
         is in the simulated database."""
         return True
+
+    page.snack_bar = ft.SnackBar(ft.Text(f"Такого пользователя нет!"))
+    page.snack_bar.open = True
+    page.update()
 
     return False
 
