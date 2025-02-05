@@ -33,6 +33,13 @@ def login_x(data: fs.Datasy):
 
 @app.page(route="/login", title="Login")
 def login_page(data: fs.Datasy):
+    page = data.page
+
+    remembered_username = page.client_storage.get("login")
+    if remembered_username in db:
+        data.login(key="login", value=remembered_username, next_route="/article/list")
+        return
+
     # create login stored user
     username = ft.TextField(label="Username")
 
